@@ -16,28 +16,47 @@ public class UnitTest {
       int i = 0;
       while(scan.hasNext()) {
         String[] line = scan.nextLine().split(",");
+        String name = line[0];
         String[] tempAnswers = new String[line.length-1];
         for(int j = 1; j < line.length; j++){
-          tempAnswers[j] = line[j];
+          tempAnswers[j-1] = line[j];
         }
-        studentAnswers[i] = new StudentAnswer(line[0], tempAnswers);
+        studentAnswers[i] = new StudentAnswer(name, tempAnswers);
         i++;
       }
+      scan.close();
     } catch(FileNotFoundException e) {
       e.printStackTrace();
     }
   }
   
   // instance methods
-  // private int findNumStudents(Scanner s) {
-  //   int i = 0;
-  //   while(s.hasNext()) {
-  //     s.nextLine();
-  //     i++;
-  //   }
-  //   return i-1;
-  // }
+  public StudentAnswer[] getStudentAnswers(){
+    return studentAnswers;
+  }
 
+  public int totalCorrect(String name){
+    int correct = 0;
+    for(StudentAnswer student : studentAnswers){
+      if(student.getName().equals(name)){
+        String[] answers = student.getAnswers();
+        for (int i = 0; i < answers.length; i++){
+          if(answers[i].toUpperCase().equals(answerKey[i])){
+            correct++;
+          }
+        }
+      }
+      }
+      return correct;
+  }
+
+  public int totalMistakes(String name){
+    return -totalCorrect(name) + 20;
+  }
+
+  public boolean isPassing(String name){
+    return totalCorrect(name) >= 14;
+  }
   
 }
 
